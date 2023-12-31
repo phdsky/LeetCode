@@ -1,5 +1,0 @@
-### 200.岛屿数量
-
-1. 深度优先搜索
-   
-[Leetcode Link](https://leetcode-cn.com/problems/number-of-islands/)
