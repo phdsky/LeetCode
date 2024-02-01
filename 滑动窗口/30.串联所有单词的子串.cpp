@@ -72,7 +72,7 @@
 
 // @lc code=start
 /**
- * 哈希表 比对字符 偶尔不TLE
+ * 滑动窗口 + 哈希表
  */
 class Solution
 {
@@ -81,46 +81,51 @@ public:
     {
         int num = words.size();
         int len = words[0].size();
-        int size = num * len;
-        if (s.size() < size)
-        {
+        if (s.size() < num * len)
             return {};
-        }
 
-        unordered_map<string, int> hash_map;
+        unordered_map<string, int> target, source;
         for (int i = 0; i < num; i++)
-        {
-            hash_map[words[i]]++;
-        }
+            target[words[i]]++;
 
         vector<int> result;
-        for (int i = 0; i <= s.size() - size; i++)
+        // 以 len 为每次滑窗的步长
+        for (int i = 0; i < len; i++)
         {
-            auto sub = s.substr(i, size);
-            auto tmp = hash_map;
-            for (int j = 0; j < num; j++)
+            for (int left = i, right = i; right < s.size(); right += len)
             {
-                auto sb = sub.substr(j * len, len);
-                tmp[sb]--;
-            }
+                // 进窗口
+                string substr = s.substr(right, len);
+                source[substr]++;
 
-            bool res = true;
-            for (auto &[k, v] : tmp)
-            {
-                if (v != 0)
+                if (right - left + 1 > num * len)
                 {
-                    res = false;
-                    break;
+                    // 出窗口
+                    substr = s.substr(left, len);
+                    source[substr]--;
+                    left += len;
                 }
+
+                if (check(source, target))
+                    result.push_back(left);
             }
 
-            if (res)
-            {
-                result.push_back(i);
-            }
+            source.clear();
         }
 
         return result;
+    }
+
+private:
+    bool check(auto &src, auto &tgt)
+    {
+        for (auto &[k, v] : tgt)
+        {
+            if (src[k] != v)
+                return false;
+        }
+
+        return true;
     }
 };
 // @lc code=end
