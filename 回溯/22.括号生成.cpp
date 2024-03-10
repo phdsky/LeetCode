@@ -3,14 +3,14 @@
  *
  * [22] 括号生成
  *
- * https://leetcode-cn.com/problems/generate-parentheses/description/
+ * https://leetcode.cn/problems/generate-parentheses/description/
  *
  * algorithms
- * Medium (77.36%)
- * Likes:    2515
+ * Medium (77.56%)
+ * Likes:    3529
  * Dislikes: 0
- * Total Accepted:    468.7K
- * Total Submissions: 605.7K
+ * Total Accepted:    803.2K
+ * Total Submissions: 1M
  * Testcase Example:  '3'
  *
  * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
@@ -42,37 +42,37 @@
  */
 
 // @lc code=start
-
-/**
- * 回溯分别生成左右括号
- */
 class Solution
 {
 public:
     vector<string> generateParenthesis(int n)
     {
-        vector<string> parenthesis;
-        backtrace("", parenthesis, n, n);
-
-        return parenthesis;
+        string str = "";
+        backtracking(str, n, n);
+        return result;
     }
 
-    void backtrace(string parent, vector<string> &parenthesis, int left, int right)
+private:
+    void backtracking(string& str, int left, int right)
     {
+        if (left < 0 || right < 0 || left > right)
+            return;
+
         if (left == 0 && right == 0)
         {
-            parenthesis.push_back(parent);
-            return;
+            result.push_back(str);
         }
 
-        if (left > right)
-            return;
+        // left trace
+        str += '(';
+        backtracking(str, left - 1, right);
+        str.pop_back();
 
-        if (left > 0)
-            backtrace(parent + '(', parenthesis, left - 1, right);
-
-        if (right > 0)
-            backtrace(parent + ')', parenthesis, left, right - 1);
+        str += ')';
+        backtracking(str, left, right - 1);
+        str.pop_back();
     }
+
+    vector<string> result;
 };
 // @lc code=end
