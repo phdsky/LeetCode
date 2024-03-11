@@ -58,7 +58,7 @@ public:
 private:
     void backtracking(vector<int>& nums, int start)
     {
-        results.push_back(track);
+        result.push_back(track);
 
         for (int i = start; i < nums.size(); i++)
         {

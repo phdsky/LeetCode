@@ -3,14 +3,14 @@
  *
  * [797] 所有可能的路径
  *
- * https://leetcode-cn.com/problems/all-paths-from-source-to-target/description/
+ * https://leetcode.cn/problems/all-paths-from-source-to-target/description/
  *
  * algorithms
- * Medium (78.87%)
- * Likes:    266
+ * Medium (78.78%)
+ * Likes:    466
  * Dislikes: 0
- * Total Accepted:    60.9K
- * Total Submissions: 77.2K
+ * Total Accepted:    126.5K
+ * Total Submissions: 160.7K
  * Testcase Example:  '[[1,2],[3],[3],[]]'
  *
  * 给你一个有 n 个节点的 有向无环图（DAG），请你找出所有从节点 0 到节点 n-1 的路径并输出（不要求按特定顺序）
@@ -56,44 +56,36 @@
  */
 
 // @lc code=start
-
-/**
- * 深度优先搜索
-
-   使用深度优先搜索的方式求出所有可能的路径。从0号点出发，使用栈记录路径上的点。每次我们遍历到点n−1，就将栈中记录的路径加入到答案中。
-
-   特别地，因为本题中的图为有向无环图（DAG），搜索过程中不会反复遍历同一个点，因此我们无需判断当前点是否遍历过。
-*/
 class Solution
 {
 public:
-    vector<vector<int>> allPathsSourceTarget(vector<vector<int>> &graph)
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph)
     {
-        int n = graph.size();
-        path.push_back(0);
-        dfs(graph, 0, n - 1);
-
-        return paths;
+        N = graph.size();
+        track.push_back(0);
+        backtracking(graph, 0);
+        return result;
     }
 
 private:
-    vector<vector<int>> paths;
-    vector<int> path;
-
-    void dfs(vector<vector<int>> &graph, int x, int n)
+    void backtracking(vector<vector<int>>& graph, int idx)
     {
-        if (x == n)
+        if (idx == N - 1)
         {
-            paths.push_back(path);
+            result.push_back(track);
             return;
         }
 
-        for (auto &g : graph[x])
+        for (int i = 0; i < graph[idx].size(); i++)
         {
-            path.push_back(g);
-            dfs(graph, g, n);
-            path.pop_back();
+            track.push_back(graph[idx][i]);
+            backtracking(graph, graph[idx][i]);
+            track.pop_back();
         }
     }
+
+    int N;
+    vector<int> track;
+    vector<vector<int>> result;
 };
 // @lc code=end

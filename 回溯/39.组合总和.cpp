@@ -3,14 +3,14 @@
  *
  * [39] 组合总和
  *
- * https://leetcode-cn.com/problems/combination-sum/description/
+ * https://leetcode.cn/problems/combination-sum/description/
  *
  * algorithms
- * Medium (72.78%)
- * Likes:    1869
+ * Medium (72.39%)
+ * Likes:    2735
  * Dislikes: 0
- * Total Accepted:    457.8K
- * Total Submissions: 628.9K
+ * Total Accepted:    876.4K
+ * Total Submissions: 1.2M
  * Testcase Example:  '[2,3,6,7]\n7'
  *
  * 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target
@@ -51,52 +51,44 @@
  *
  *
  * 1 <= candidates.length <= 30
- * 1 <= candidates[i] <= 200
- * candidate 中的每个元素都 互不相同
- * 1 <= target <= 500
+ * 2 <= candidates[i] <= 40
+ * candidates 的所有元素 互不相同
+ * 1 <= target <= 40
  *
  *
  */
 
 // @lc code=start
-
-/**
- * 回溯法 同一个数字可以被重复选取，下标不用递增
- */
 class Solution
 {
 public:
-    vector<vector<int>> combinationSum(vector<int> &candidates, int target)
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target)
     {
-        // sort(candidates.begin(), candidates.end());
-
-        vector<int> combine;
-        backtrack(candidates, target, combine, 0);
-
-        return combinations;
+        backtracking(candidates, 0, target);
+        return result;
     }
 
 private:
-    vector<vector<int>> combinations;
-
-    void backtrack(vector<int> &candidates, int target, vector<int> &combine, int idx)
+    void backtracking(vector<int>& candidates, int start, int target)
     {
-        if (target < 0)
-        {
-            return;
-        }
         if (target == 0)
         {
-            combinations.push_back(combine);
+            result.push_back(track);
             return;
         }
 
-        for (int i = idx; i < candidates.size(); i++)
+        for (int i = start; i < candidates.size(); i++)
         {
-            combine.push_back(candidates[i]);
-            backtrack(candidates, target - candidates[i], combine, i);
-            combine.pop_back();
+            if (target - candidates[i] < 0)
+                continue;
+
+            track.push_back(candidates[i]);
+            backtracking(candidates, i, target - candidates[i]);
+            track.pop_back();
         }
     }
+
+    vector<int> track;
+    vector<vector<int>> result;
 };
 // @lc code=end
