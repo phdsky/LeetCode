@@ -84,8 +84,57 @@ class Solution
 public:
     int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score)
     {
+        for (auto& l : letters)
+            letterMap[l]++;
+
+        int res = 0;
+        backtracking(words, score, 0, res);
+
+        return maxScore;
     }
 
 private:
+    void backtracking(vector<string>& words, vector<int>& score, int start, int& result)
+    {
+        if (result > maxScore)
+            maxScore = result;
+        if (start == words.size())
+            return;
+
+        for (int i = start; i < words.size(); i++)
+        {
+            // check if i isValid
+            if (!isValid(words[i]))
+                continue;
+
+            for (auto& c : words[i])
+            {
+                letterMap[c]--;
+                result += score[c - 'a'];
+            }
+            backtracking(words, score, i + 1, result);
+            for (auto& c : words[i])
+            {
+                letterMap[c]++;
+                result -= score[c - 'a'];
+            }
+        }
+    }
+
+    bool isValid(string& word)
+    {
+        unordered_map<char, int> tmpMap;
+        for (auto& w : word) tmpMap[w]++;
+        for (auto& [k, v] : tmpMap)
+        {
+            if (letterMap[k] < v)
+                return false;
+        }
+
+        return true;
+    }
+
+    int maxScore = 0;
+    unordered_map<char, int> letterMap;
 };
 // @lc code=end
